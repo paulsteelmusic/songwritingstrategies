@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oblique Strategies for Songwriters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e8ebf4;
+  --ink: #1d2240;
+  --muted: #565d7a;
+  --paper: #fdfdfb;
+  --rule: #c5d6ea;
+  --margin: #e06a6a;
+  --marker: #ffd84d;
+  --chip: #ffffff;
+  --chip-border: #c9cee0;
+  --shadow: 0 18px 40px -18px rgba(29, 34, 64, .45);
+  --c-words: #3f6fa3;
+  --c-imagery: #8a6a0c;
+  --c-story: #24788a;
+  --c-perspective: #7d52b5;
+  --c-structure: #23805f;
+  --c-sound: #c25a2b;
+  --c-process: #b23e5f;
+  --c-mindset: #5c6178;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Work Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #181c33;
+    --ink: #eef0f8;
+    --muted: #a8aecb;
+    --chip: #232846;
+    --chip-border: #3a4066;
+    --shadow: 0 18px 40px -18px rgba(0, 0, 0, .7);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #181c33;
+  --ink: #eef0f8;
+  --muted: #a8aecb;
+  --chip: #232846;
+  --chip-border: #3a4066;
+  --shadow: 0 18px 40px -18px rgba(0, 0, 0, .7);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+}
+header h1 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  line-height: 1.15;
+  margin: 0 0 .35rem;
+}
+header p {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  max-width: 60ch;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.25rem;
+  border: 0;
+  padding: 0;
+}
+.filters legend {
+  font-size: .9rem;
+  color: var(--muted);
+  margin-bottom: .5rem;
+  padding: 0;
+}
+.chip {
+  font: 500 .9rem var(--sans);
+  border: 1.5px solid var(--chip-border);
+  background: var(--chip);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: .35rem .8rem .35rem .6rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.chip .dot {
+  width: .65rem; height: .65rem; border-radius: 50%;
+  background: var(--dot);
+}
+.chip[aria-pressed="false"] { opacity: .5; }
+.chip[aria-pressed="false"] .dot { background: transparent; box-shadow: inset 0 0 0 2px var(--dot); }
+
+.stage { perspective: 1400px; }
+.card {
+  position: relative;
+  background:
+    linear-gradient(to right, transparent 3.2rem, var(--margin) 3.2rem, var(--margin) calc(3.2rem + 2px), transparent calc(3.2rem + 2px)),
+    repeating-linear-gradient(to bottom, transparent 0, transparent calc(2rem - 1px), var(--rule) calc(2rem - 1px), var(--rule) 2rem);
+  background-color: var(--paper);
+  background-position: 0 0, 0 4.5rem;
+  background-repeat: no-repeat, repeat;
+  color: #1d2240;
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  min-height: 300px;
+  padding: 1.25rem 1.5rem 1.5rem 4.25rem;
+  display: flex;
+  flex-direction: column;
+  transform-style: preserve-3d;
+}
+.card.flip { animation: flip .55s cubic-bezier(.2,.7,.2,1); }
+@keyframes flip {
+  0% { transform: rotateX(0) translateY(0); }
+  45% { transform: rotateX(80deg) translateY(-12px); }
+  55% { transform: rotateX(-80deg) translateY(-12px); }
+  100% { transform: rotateX(0) translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card.flip { animation: none; }
+}
+.tab {
+  align-self: flex-start;
+  font: 600 .85rem var(--sans);
+  color: #fff;
+  background: var(--cat, var(--c-mindset));
+  padding: .2rem .65rem;
+  border-radius: 3px;
+  margin-bottom: 1.5rem;
+}
+.instruction {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 4.6vw, 2.25rem);
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+.hint {
+  margin: auto 0 0;
+  font-size: 1rem;
+  color: #4a5070;
+  max-width: 48ch;
+}
+.empty .instruction { color: #565d7a; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin-top: 1.25rem;
+}
+.btn {
+  font: 600 1rem var(--sans);
+  border-radius: 6px;
+  padding: .7rem 1.25rem;
+  cursor: pointer;
+  border: 2px solid var(--ink);
+}
+.btn-primary { background: var(--marker); color: #1d2240; border-color: #1d2240; }
+.btn-primary:hover { filter: brightness(1.04); }
+.btn-quiet { background: transparent; color: var(--ink); }
+.count { color: var(--muted); font-size: .95rem; margin-left: auto; }
+button:focus-visible { outline: 3px solid var(--c-words); outline-offset: 3px; }
+
+.history { margin-top: 1.75rem; }
+.history h2 {
+  font: 600 1rem var(--sans);
+  margin: 0 0 .5rem;
+}
+.history ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--muted);
+}
+.history li { margin: .2rem 0; }
+.history li span { color: var(--ink); }
+footer {
+  margin-top: 2rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+@media (max-width: 480px) {
+  .card { padding-left: 3.25rem; min-height: 260px; }
+  .card { background-position: -1rem 0, 0 4.5rem; }
+  .count { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Oblique Strategies for Songwriters</h1>
+    <p>Stuck on a song? Draw a card and follow the instruction, even if it seems wrong. Press the space bar to draw.</p>
+  </header>
+
+  <fieldset class="filters" id="filters">
+    <legend>Cards from these categories</legend>
+  </fieldset>
+
+  <div class="stage">
+    <article class="card empty" id="card" aria-live="polite">
+      <span class="tab" id="tab">Ready</span>
+      <p class="instruction" id="instruction">Draw a card to begin.</p>
+      <p class="hint" id="hint">No repeats until you've seen the whole deck.</p>
+    </article>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="draw" type="button">Draw a card</button>
+    <button class="btn btn-quiet" id="reshuffle" type="button">Reshuffle deck</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <section class="history" id="historyWrap" hidden>
+    <h2>Earlier draws</h2>
+    <ol id="history"></ol>
+  </section>
+
+  <footer>Inspired by Oblique Strategies, the card deck created by Brian Eno and Peter Schmidt in 1975. Every card here is written for songwriters.</footer>
+</div>
+
+<script>
+const CATEGORIES = {
+  words:       { label: "Words",         color: "var(--c-words)" },
+  imagery:     { label: "Imagery",       color: "var(--c-imagery)" },
+  story:       { label: "Story",         color: "var(--c-story)" },
+  perspective: { label: "Perspective",   color: "var(--c-perspective)" },
+  structure:   { label: "Structure",     color: "var(--c-structure)" },
+  sound:       { label: "Sound & rhyme", color: "var(--c-sound)" },
+  process:     { label: "Process",       color: "var(--c-process)" },
+  mindset:     { label: "Mindset",       color: "var(--c-mindset)" }
+};
+
+const CARDS = [
+  ["words", "Replace every abstract word with something you can touch.", "Swap \"sadness\" for the cold tea nobody drank."],
+  ["words", "Steal a phrase you overheard today.", "The best lines are often things real people actually say."],
+  ["words", "Cut every adjective. Put one back.", "Pick the one that earns its place."],
+  ["words", "Name a real place, brand or person.", "Specific details make a song feel true."],
+  ["words", "Find the cliché. Change one word of it.", "\"Broken heart\" becomes \"borrowed heart\"."],
+  ["words", "Write the line you're scared to write.", "You don't have to keep it. You do have to write it."],
+  ["words", "Use only words a ten-year-old would know.", "Simple words often hit hardest."],
+  ["words", "Make the title the first and last thing we hear.", "Frame the song with its hook."],
+  ["words", "Swap your strongest noun for a stranger one.", "\"Car\" could become \"hearse\", \"ice-cream van\" or \"getaway car\"."],
+  ["words", "Let the verbs do the work.", "Replace \"walked\" with a verb that shows how."],
+  ["words", "Use a word you've never heard in a song.", "Borrow one from a hobby, a job or an instruction manual."],
+  ["words", "Borrow the language of a job.", "Write a love song in the words of a mechanic or a nurse."],
+  ["words", "Use the same word twice, with two meanings.", "\"Light\" as in weight, and \"light\" as in glow."],
+  ["words", "Write a line using only one-syllable words.", "Short words, strong rhythm."],
+  ["words", "Take a common phrase literally.", "What would \"falling for you\" actually look like?"],
+  ["words", "Delete every \"really\", \"just\" and \"so\".", "Filler words water a lyric down."],
+  ["words", "Turn a noun into a verb.", "\"She winters in my head.\""],
+  ["words", "Use a phrase your grandparents would say.", "Old sayings carry history with them."],
+  ["words", "Write the chorus in fewer than ten words.", "Short choruses travel further."],
+  ["words", "Use a number.", "\"Seventeen missed calls\" beats \"lots of calls\"."],
+  ["words", "Put a question in the first line.", "Questions pull the listener in."],
+  ["words", "Quote someone directly.", "Let us hear their actual voice."],
+  ["words", "Pick one word and build the whole song around it.", "Make every line orbit it."],
+  ["words", "Ban the word \"love\".", "Show it instead."],
+  ["words", "Use slang from where you grew up.", "Local words sound like nowhere else."],
+  ["imagery", "Describe a smell.", "Smell is the sense most tied to memory."],
+  ["imagery", "What's in their pockets?", "Objects reveal people."],
+  ["imagery", "Write about the weather without naming a feeling.", "Let the weather carry the mood."],
+  ["imagery", "Show us the room.", "Three objects and one light source."],
+  ["imagery", "Describe a colour without naming it.", "\"The colour of a gas flame.\""],
+  ["imagery", "Find an image for the feeling. Don't name the feeling.", "Show anxiety as a dripping tap."],
+  ["imagery", "Pick one image and keep coming back to it.", "Let it change a little each time."],
+  ["imagery", "Use touch. What's rough, cold or sticky?", "Texture makes a lyric physical."],
+  ["imagery", "Describe a sound in the scene.", "A kettle, a car alarm, a laugh through the wall."],
+  ["imagery", "Compare two things that shouldn't go together.", "\"Love like a parking ticket.\""],
+  ["imagery", "Zoom out to the whole city, then back to one window.", "Wide shot, then close-up."],
+  ["imagery", "Write the song as a photograph.", "Everything happens in one frozen frame."],
+  ["imagery", "Use the time of day.", "4am feels very different from 4pm."],
+  ["imagery", "Find the detail only you would notice.", "That's what makes the song yours."],
+  ["imagery", "Write a line about food.", "What's on the table tells a story."],
+  ["imagery", "Put something from nature in the city.", "Foxes in the car park."],
+  ["imagery", "Give an object a feeling.", "The phone sulks on the table."],
+  ["imagery", "Describe their hands.", "Hands tell you about a whole life."],
+  ["imagery", "Let the light change through the song.", "Dawn to dusk, or lamp to darkness."],
+  ["imagery", "Write what's outside the window.", "What does the singer keep looking at?"],
+  ["imagery", "Use one image from your childhood.", "A wallpaper pattern, a school corridor smell."],
+  ["imagery", "Paint the scene in three nouns.", "Train. Rain. Receipt."],
+  ["imagery", "Make one metaphor last a whole verse.", "Extend it instead of dropping it."],
+  ["imagery", "Mix up the senses.", "Hear a colour. Taste a sound."],
+  ["imagery", "Describe something that's missing.", "The empty hook where a coat used to hang."],
+  ["story", "Start in the middle of the action.", "Skip the explanation."],
+  ["story", "What happened just before the song begins?", "Hint at it. Don't tell it."],
+  ["story", "Give the character a name.", "Names make people real."],
+  ["story", "Make something change between verse one and verse two.", "Time passes, or someone leaves."],
+  ["story", "Leave the ending unresolved.", "Let the listener decide."],
+  ["story", "Tell a story you heard from someone else.", "Change the details to protect them."],
+  ["story", "What does the character want?", "Every story starts with a want."],
+  ["story", "What's stopping them?", "Conflict drives the song forward."],
+  ["story", "Write about a moment, not a relationship.", "One night, not three years."],
+  ["story", "Put a secret in the song.", "Let it surface slowly."],
+  ["story", "Write about a first time.", "First flat, first fight, first gig."],
+  ["story", "Write about a last time.", "The last time you saw a place, or a person."],
+  ["story", "Tell the story in reverse.", "Start at the end."],
+  ["story", "Write about the morning after.", "The aftermath is often more interesting."],
+  ["story", "Set the song in a waiting room.", "Everyone there is waiting for something."],
+  ["story", "Make it an argument about something small.", "The washing-up is never really about the washing-up."],
+  ["story", "Write about a journey.", "Where are they going, and why?"],
+  ["story", "Turn a news story into a personal song.", "One person's view of a big event."],
+  ["story", "Have something go wrong in the last verse.", "A twist keeps us listening."],
+  ["story", "Write the story your family tells at every gathering.", "Every family has one."],
+  ["story", "Write about a place that no longer exists.", "A closed shop, a demolished school."],
+  ["story", "Let a small thing carry the big story.", "A lost glove can hold a whole break-up."],
+  ["story", "Bring in a new character in the bridge.", "Change the story's direction."],
+  ["story", "Write about an ordinary day that turned out to matter.", "You didn't know it at the time."],
+  ["story", "Let the chorus say what they can't say out loud.", "The verses tell. The chorus confesses."],
+  ["perspective", "Tell it from the point of view of an object in the room.", "What has the kitchen table seen?"],
+  ["perspective", "Switch from \"I\" to \"you\".", "Watch how the meaning shifts."],
+  ["perspective", "Write it as a letter to someone who will never read it.", "Honesty comes easier with no audience."],
+  ["perspective", "Let the other person in the story speak.", "Give them a verse of their own."],
+  ["perspective", "Set the song ten years later.", "How does the same moment look from far away?"],
+  ["perspective", "Zoom in on one second of the story.", "Slow everything down."],
+  ["perspective", "Write as the villain.", "Make us understand them."],
+  ["perspective", "Write as your younger self.", "What did you believe at twelve?"],
+  ["perspective", "Write as your older self.", "Look back with some wisdom."],
+  ["perspective", "Write to your future self.", "Give advice, or a warning."],
+  ["perspective", "Write as a stranger watching the scene.", "What can an outsider see that you can't?"],
+  ["perspective", "Switch to \"we\".", "Make it a shared story."],
+  ["perspective", "Write as a place.", "What has the bus stop witnessed?"],
+  ["perspective", "Write as an animal.", "The dog sees everything."],
+  ["perspective", "Write it as an apology.", "Even if you're not sorry."],
+  ["perspective", "Write it as a thank-you.", "Gratitude can be surprising in a song."],
+  ["perspective", "Argue the other side.", "Make the best case for the person you disagree with."],
+  ["perspective", "Write it as advice to a friend.", "What would you tell them?"],
+  ["perspective", "Talk directly to the listener.", "\"You\" can mean whoever is listening."],
+  ["perspective", "Write as if nobody you know will ever hear it.", "Total freedom."],
+  ["perspective", "Write it as a voicemail.", "One take, no editing."],
+  ["perspective", "Swap who's telling the story.", "Let the quieter person narrate."],
+  ["perspective", "Write from the moment you found out.", "Freeze the second the news landed."],
+  ["perspective", "Write as the song itself.", "What does the song want to be?"],
+  ["perspective", "Write as someone who just arrived in town.", "Everything is new and strange."],
+  ["structure", "Start with the chorus.", "Get to the point."],
+  ["structure", "Make the bridge the truest moment.", "Save the confession for the bridge."],
+  ["structure", "Remove the second verse.", "Does the song miss it?"],
+  ["structure", "Repeat the hook once more than feels comfortable.", "Repetition is how a song gets stuck in someone's head."],
+  ["structure", "Let the last line answer the first.", "Close the circle."],
+  ["structure", "Change what the chorus means by its final time.", "Same words, new weight."],
+  ["structure", "Write the verse as a list.", "Five things, in order."],
+  ["structure", "Open with the hook.", "Don't make them wait."],
+  ["structure", "Make the pre-chorus build tension.", "Lift the energy toward the chorus."],
+  ["structure", "Write a song with no chorus.", "Let the verses carry it."],
+  ["structure", "Make the chorus one line, repeated.", "Simple can be powerful."],
+  ["structure", "Write a verse in half the lines.", "Shorter verses, faster story."],
+  ["structure", "Put the title in the first line of the chorus.", "Signpost the hook."],
+  ["structure", "Put the title in the last line of the chorus.", "Land on it."],
+  ["structure", "End on the bridge.", "Don't go back to the chorus."],
+  ["structure", "Make the second verse contradict the first.", "Change the story."],
+  ["structure", "Write a post-chorus.", "A tag line, a chant, a \"whoa\"."],
+  ["structure", "Start every verse with the same line.", "A refrain that frames each section."],
+  ["structure", "Vary the line lengths in the chorus.", "Contrast makes it stand out."],
+  ["structure", "Write a call and response.", "One line asks. The next answers."],
+  ["structure", "Let the final verse jump forward in time.", "What happened next?"],
+  ["structure", "Write the bridge first.", "Find the heart, then build around it."],
+  ["structure", "Cut the intro. Start singing straight away.", "Grab the listener in the first seconds."],
+  ["structure", "Make every chorus slightly different.", "Change one word each time."],
+  ["structure", "Give each section a different time of day.", "Morning verse, midnight chorus."],
+  ["sound", "No perfect rhymes. Only near rhymes.", "\"Home\" can rhyme with \"alone\"."],
+  ["sound", "Choose words for their vowel sounds.", "Long vowels sing. Short ones punch."],
+  ["sound", "End every line on the same sound.", "Make it hypnotic."],
+  ["sound", "Rhyme in the middle of the line, not the end.", "Hide the rhymes inside."],
+  ["sound", "Write a line that's fun to say out loud.", "Read it aloud until it feels good in your mouth."],
+  ["sound", "Write one long, breathless line.", "Then follow it with a very short one."],
+  ["sound", "Sing nonsense until a real word appears.", "Keep the sounds you like."],
+  ["sound", "Use alliteration in the hook.", "Repeated first sounds make a line sticky."],
+  ["sound", "Rhyme a word with a phrase.", "\"Sweater\" with \"let her\"."],
+  ["sound", "Break your rhyme scheme on purpose.", "The missing rhyme becomes the surprise."],
+  ["sound", "Write with no rhymes at all.", "Let rhythm hold it together."],
+  ["sound", "Use a rhyme you'd normally avoid. Make it work.", "\"Fire\" and \"desire\". Earn it."],
+  ["sound", "Repeat a sound, not a word.", "Lots of \"s\" sounds feel hushed."],
+  ["sound", "Put stressed syllables on the strong beats.", "Say it aloud to check it lands."],
+  ["sound", "Find the tongue-twister and fix it.", "Sing every line. Smooth out the clumsy ones."],
+  ["sound", "Use hard consonants for anger.", "\"K\", \"t\" and \"p\" bite."],
+  ["sound", "Use soft sounds for tenderness.", "\"L\", \"m\" and \"w\" soothe."],
+  ["sound", "Start each line with the last word of the one before.", "Chain the lines together."],
+  ["sound", "End chorus lines on open vowels.", "They're easier to hold and belt."],
+  ["sound", "Match the syllable count of verse one and verse two.", "Consistency helps the melody repeat."],
+  ["sound", "Write a rhyme nobody sees coming.", "Avoid the first rhyme you think of."],
+  ["sound", "Use onomatopoeia.", "Buzz, crack, hiss."],
+  ["sound", "Rhyme two lines a whole verse apart.", "Delayed rhymes reward close listening."],
+  ["sound", "Whisper your lyric. Which words disappear?", "Rewrite the ones that vanish."],
+  ["sound", "Speak the lyric in rhythm, like a rap.", "Hear where the stresses fall."],
+  ["process", "Set a five-minute timer. Stop when it rings.", "Deadlines beat perfectionism."],
+  ["process", "Write the worst possible version first.", "Bad first drafts take the pressure off."],
+  ["process", "Keep the mistake.", "What if it was meant to be there?"],
+  ["process", "Throw away your favourite line.", "Sometimes it's holding the rest of the song back."],
+  ["process", "Finish it badly, then fix it.", "A finished rough draft beats a perfect half."],
+  ["process", "Move. Write somewhere you never write.", "New room, new ideas."],
+  ["process", "Write the title first, then earn it.", "Everything has to point back to the title."],
+  ["process", "Write it on paper, by hand.", "Slower writing, different choices."],
+  ["process", "Write ten titles in two minutes.", "Pick the one that surprises you."],
+  ["process", "Write twenty versions of your hook line.", "The tenth is usually better than the first."],
+  ["process", "Leave it overnight.", "Fresh ears fix problems."],
+  ["process", "Read it to someone else.", "Watch which lines they react to."],
+  ["process", "Record a voice memo. Listen back tomorrow.", "Hear it as a listener would."],
+  ["process", "Write with your phone in another room.", "Distraction kills ideas."],
+  ["process", "Start with a line from your notes app.", "Your past self left you gifts."],
+  ["process", "Swap a verse with a friend.", "Edit each other's lines."],
+  ["process", "Rewrite the song in a different genre.", "Turn the ballad into a punk song."],
+  ["process", "Write the chorus in one sitting. Don't stop.", "Momentum over polish."],
+  ["process", "Give yourself a deadline for today.", "Finished is better than perfect."],
+  ["process", "Write in silence, then with music on.", "Notice what changes."],
+  ["process", "List every word linked to your title.", "Build a word bank before you write."],
+  ["process", "Write the same verse three ways.", "Sad, angry, hopeful. Keep the best."],
+  ["process", "Highlight your strongest line. Build around it.", "Everything else should support it."],
+  ["process", "Only edit after you've finished.", "Write now, judge later."],
+  ["process", "Copy out a favourite lyric by hand, then write your own.", "Feel how another writer works."],
+  ["mindset", "What would your favourite artist never do? Do that.", "Step outside the sound you admire."],
+  ["mindset", "Make it smaller.", "Small, specific stories feel universal."],
+  ["mindset", "Say less.", "Leave space for the listener."],
+  ["mindset", "What's the obvious next line? Write something else.", "Surprise yourself."],
+  ["mindset", "Exaggerate the smallest detail.", "Make the tiny thing enormous."],
+  ["mindset", "Be more honest than is comfortable.", "That's usually where the song is."],
+  ["mindset", "What is the song really about? Write that instead.", "The first subject is often a disguise."],
+  ["mindset", "Trust your first idea.", "Stop second-guessing and keep going."],
+  ["mindset", "Make it funnier.", "Humour can make sadness hit harder."],
+  ["mindset", "What are you avoiding? Write about that.", "Resistance points to the song."],
+  ["mindset", "Write for one specific person.", "A song for everyone reaches no one."],
+  ["mindset", "Lower the stakes. It's only a draft.", "Play, don't perform."],
+  ["mindset", "Embrace the cringe.", "Sincerity beats being cool."],
+  ["mindset", "Make it braver.", "What's the riskier version?"],
+  ["mindset", "Simplify. Then simplify again.", "Strip it back to the bones."],
+  ["mindset", "Make it stranger.", "Add one thing that doesn't belong."],
+  ["mindset", "Write as if it's the last song you'll ever write.", "What would you need to say?"],
+  ["mindset", "Write as if it's the first song you've ever written.", "Forget the rules."],
+  ["mindset", "What should the listener feel?", "Write toward that feeling."],
+  ["mindset", "Change one thing, not everything.", "Small edits, big results."],
+  ["mindset", "Stop explaining.", "Trust the listener."],
+  ["mindset", "Is this true?", "If not, make it true, or make it better."],
+  ["mindset", "Kill the safe choice.", "Swap the line you chose because it was easy."],
+  ["mindset", "Ask \"what if?\"", "What if the opposite happened?"],
+  ["mindset", "Write the song only you could write.", "Your life, your details, your voice."]
+];
+
+const active = new Set(Object.keys(CATEGORIES));
+let deck = [];
+const history = [];
+
+const els = {
+  filters: document.getElementById("filters"),
+  card: document.getElementById("card"),
+  tab: document.getElementById("tab"),
+  instruction: document.getElementById("instruction"),
+  hint: document.getElementById("hint"),
+  draw: document.getElementById("draw"),
+  reshuffle: document.getElementById("reshuffle"),
+  count: document.getElementById("count"),
+  historyWrap: document.getElementById("historyWrap"),
+  history: document.getElementById("history")
+};
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildDeck() {
+  deck = shuffle(CARDS.filter(c => active.has(c[0])));
+  updateCount();
+}
+
+function updateCount() {
+  const total = CARDS.filter(c => active.has(c[0])).length;
+  els.count.textContent = total === 0
+    ? "Choose at least one category."
+    : `${deck.length} of ${total} cards left`;
+  els.draw.disabled = total === 0;
+}
+
+function renderFilters() {
+  Object.entries(CATEGORIES).forEach(([key, cat]) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.style.setProperty("--dot", cat.color);
+    b.setAttribute("aria-pressed", "true");
+    b.innerHTML = `<span class="dot" aria-hidden="true"></span>${cat.label}`;
+    b.addEventListener("click", () => {
+      if (active.has(key)) active.delete(key); else active.add(key);
+      b.setAttribute("aria-pressed", active.has(key) ? "true" : "false");
+      buildDeck();
+    });
+    els.filters.appendChild(b);
+  });
+}
+
+function draw() {
+  if (deck.length === 0) {
+    buildDeck();
+    if (deck.length === 0) return;
+  }
+  const [cat, text, hint] = deck.pop();
+  const c = CATEGORIES[cat];
+
+  if (!els.card.classList.contains("empty")) {
+    history.unshift(els.instruction.textContent);
+    if (history.length > 5) history.pop();
+    els.history.innerHTML = history.map(h => `<li><span></span></li>`).join("");
+    [...els.history.querySelectorAll("span")].forEach((s, i) => s.textContent = history[i]);
+    els.historyWrap.hidden = false;
+  }
+
+  els.card.classList.remove("empty", "flip");
+  void els.card.offsetWidth;
+  els.card.classList.add("flip");
+  els.card.style.setProperty("--cat", c.color);
+  els.tab.textContent = c.label;
+  els.instruction.textContent = text;
+  els.hint.textContent = hint;
+  updateCount();
+  if (deck.length === 0) {
+    els.count.textContent = "Last card. The next draw reshuffles the deck.";
+  }
+}
+
+els.draw.addEventListener("click", draw);
+els.reshuffle.addEventListener("click", () => {
+  buildDeck();
+  els.count.textContent += " (reshuffled)";
+});
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && !(e.target instanceof HTMLButtonElement)) {
+    e.preventDefault();
+    draw();
+  }
+});
+
+renderFilters();
+buildDeck();
+</script>
+</body>
+</html>
